@@ -5,6 +5,17 @@ Repository for generating Fact Sheet for MetaDL Competition
 
 `generate_fact_sheet_results.py` `generate_fact_sheet_results.ipynb`
 
+```
+!python generate_factsheet_results.py \
+--CSV_PATH '../Internship_Files/super-categories-and-categories.csv' \
+--IMAGE_PATH '../Internship_Images/processed_images_128' \
+--PREDICTIONS_PATH './Baseline_Super_Categories_Predictions_40_random' \
+--LABEL_COLUMN 'Category' \
+--IMAGE_COLUMN 'file_name' \
+--CATEGORIES_TO_COMBINE 5 \
+--IMAGES_PER_CATEGORY 10
+```
+
 
 ## Step 3
 `generate_html_report.py`
