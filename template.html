@@ -1,0 +1,146 @@
+<html>
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding:5;
+            font-family: sans-serif;
+        }
+        .imgbox {
+            display: grid;
+            height: 100%;
+        }
+        .center-fit {
+            max-width: 100%;
+            max-height: 100vh;
+            margin: auto;
+        }
+        .bottom-30{
+            margin-bottom: 30px;
+        }
+        .bottom-20{
+            margin-bottom: 20px;
+        }
+        table, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        td{
+            padding: 10px;
+        }
+        .page-break{
+            display:block; clear:both; page-break-after:always;
+        }
+    </style>
+</head>
+    
+    
+  <body>
+      
+    <!--    Title    -->
+    <div class='bottom-30'>
+        <h1> {{title}} </h1>
+    </div>
+     
+     
+    <!--    Statistics    -->
+    <div class='bottom-30 '>
+        <h2>Overall Statistics</h2>
+        <p>Total Super Categories: {{total_super_categories}}</p>
+        <p>Total Categories: {{total_categories}}</p>
+        <p>Categories randomly combined: {{categories_combined}}</p>
+    </div>
+      
+      
+    <!--    Results    -->
+    <div>
+        {% for episode in episodes %}
+            <div class='bottom-30 page-break'>
+                <h2>Super-Category {{episode['super_category']}}</h2>
+                
+                
+                <!--    Statistics Table    -->
+                <div class='bottom-20'>
+                    <h4>Statistics</h4>
+                    <table>
+                        <tr> <td>Total Images</td> <td>{{episode['total_images']}}</td> </tr>
+                        <tr> <td>Train Images</td> <td>{{episode['train_images']}}</td> </tr>
+                        <tr> <td>Valid Images</td> <td>{{episode['valid_images']}}</td> </tr>
+                        <tr> <td colspan="3"></td> </tr>
+                        <tr> <td>Training Time</td> <td>{{episode['training_time']}}</td> </tr>
+                        <tr> <td>Best Train Accuracy</td> <td>{{episode['best_train_acc']}}</td> </tr>
+                        <tr> <td>Best Valid Accuracy</td> <td>{{episode['best_valid_acc']}}</td> </tr>
+                        <tr> <td colspan="3"></td> </tr>
+                        <tr> <td>AUC</td> <td>{{episode['AUC']}}</td> </tr>
+                        <tr> <td>2*AUC-1</td> <td>{{episode['2*AUC-1']}}</td> </tr>
+                        <tr> <td>Standard Error</td> <td>{{episode['standard_error']}}</td> </tr>
+                    </table>
+                </div>
+                
+                
+                <!--    Categoris Table    -->
+                <div class='bottom-20'>
+                    <h4>Categories</h4>
+                    <table>
+                        {% for category in episode['categories'] %}
+                            <tr> <td>{{category}}</td></tr>
+                        {% endfor %}
+                    </table>
+                </div>
+    
+                
+                <!--    Accuracy Loss    -->
+                <div class='bottom-20'>
+                    <h4>Accuracy Loss Plot</h4>
+                    <img class="center-fit" src='{{episode["accuracy_loss_plot"]}}'>
+                </div>
+                
+                <!--    Confusion Matrix    -->
+                <div class='bottom-20'>
+                    <h4>Confusion Matrix</h4>
+                    <img class="center-fit" src='{{episode["confusion_matrix_plot"]}}'>
+                </div>
+                
+                <!--    AUC    -->
+                <div class='bottom-20'>
+                    <h4>AUC</h4>
+                    <img class="center-fit" src='{{episode["auc_plot"]}}'>
+                </div>
+                
+                <!--    AUC Histogram    -->
+                <div class='bottom-20'>
+                    <h4>AUC Histogram</h4>
+                    <img class="center-fit" src='{{episode["auc_histogram_plot"]}}'>
+                </div>
+                
+                <!--    ROC Curves    -->
+                <div class='bottom-20'>
+                    <h4>ROC Curves</h4>
+                    <img class="center-fit" src='{{episode["roc_curves_plot"]}}'>
+                </div>
+                
+                
+                <!--    Sample Images    -->
+                <div class='bottom-20'>
+                    <h4>Sample Images</h4>
+                    <img class="center-fit" src='{{episode["sample_images"]}}'>
+                </div>
+                
+                <!--    Wrongly Classified Images   -->
+                <div class='bottom-20'>
+                    <h4>Wrongly Classified Images</h4>
+                    <img class="center-fit" src='{{episode["wrongly_classified_images"]}}'>
+                </div>
+                        
+            </div>
+        {% endfor %}
+        <!--    End Loop    -->
+        
+    </div>
+    <!--    End Results    -->
+      
+      
+     
+     
+  </body>
+</html>
