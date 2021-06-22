@@ -1,14 +1,15 @@
 # metadl_competition_fact_sheet
 Repository for generating Fact Sheet for MetaDL Competition
 
+## Step 1 - Generate Fact Sheet Results
 
-## generate_fact_sheet_results.ipynb
+`generate_fact_sheet_results.py` `generate_fact_sheet_results.ipynb`
 
-## generate_fact_sheet_results.py
 
-## generate_html_report.py
+## Step 3
+`generate_html_report.py`
 
-Use the following command to create a PDF report from the results generated in **Step 1** or **Step 2**
+Use the following command to create a PDF report from the results generated in **Step 1**
 
 ```
 python generate_html_report.py \
