@@ -49,6 +49,7 @@ python generate_factsheet_results.py \
 
 #### Results
 The results generated in this step contains the following files in the ***PREDICTIONS*** directory:
+
     - logs.txt
     - super_categories.txt
     - one folder for each super_category (If you have 10 randomly generated super_categories, then you will see 10 folders named from 0-9)
