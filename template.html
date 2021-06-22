@@ -21,11 +21,11 @@
         .bottom-20{
             margin-bottom: 20px;
         }
-        table, td {
+        table, td, th {
           border: 1px solid black;
           border-collapse: collapse;
         }
-        td{
+        td, th{
             padding: 10px;
         }
         .page-break{
@@ -49,6 +49,22 @@
         <p>Total Super Categories: {{total_super_categories}}</p>
         <p>Total Categories: {{total_categories}}</p>
         <p>Categories randomly combined: {{categories_combined}}</p>
+    </div>
+      
+      
+    <!--    Summary    -->
+    <div class='bottom-20 page-break'>
+        <h4>Summary</h4>
+        <table>
+            <tr> <th>Super Category</th> <th>AUC</th> <th>Error</th></tr>
+            {% for episode in episodes %}
+                <tr> 
+                    <td>{{episode['super_category']}}</td> 
+                    <td>{{episode['AUC']}}</td> 
+                    <td>{{episode['standard_error']}}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
       
       
