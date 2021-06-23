@@ -13,16 +13,16 @@ To generate factsheet results, you can use either `generate_fact_sheet_results.i
 
 In the notebook file `generate_fact_sheet_results.ipynb`, you have to set some variable in the first cell under the heading **Settings** and then run the whole notebook to the end.
 
-    - `CSV_PATH` : Path of the CSV file which contains the label and image name
-    - `CSV_WITH_TAB` : True if CSV is tab separated otherwise false
-    - `IMAGE_PATH` : Path of the directory where images to be used in this experiement are saved
-    - `PREDICTIONS_PATH`: Path of the directory where the results of this experiments will be saved logs.txt, super_categories.txt and one directory for each super_category which contains categories.txt, categories_auc.txt, logs.txt, some figures etc 
-    - `LABEL_COLUMN` : label column name in csv
-    - `IMAGE_COLUMN` : image column name in csv
-    - `CATEGORIES_TO_COMBINE` : number of categories to combine to make a super-category or a classification task
-    - `IMAGES_PER_CATEGORY` : number of images per category
-    - `MAX_EPISODES` : maximum limit on episodes/super-categories
-    - `SEED` : seed for generating super-categories by the same random combination of categories (Do not change)
+- `CSV_PATH` : Path of the CSV file which contains the label and image name
+- `CSV_WITH_TAB` : True if CSV is tab separated otherwise false
+- `IMAGE_PATH` : Path of the directory where images to be used in this experiement are saved
+- `PREDICTIONS_PATH`: Path of the directory where the results of this experiments will be saved logs.txt, super_categories.txt and one directory for each super_category which contains categories.txt, categories_auc.txt, logs.txt, some figures etc 
+- `LABEL_COLUMN` : label column name in csv
+- `IMAGE_COLUMN` : image column name in csv
+- `CATEGORIES_TO_COMBINE` : number of categories to combine to make a super-category or a classification task
+- `IMAGES_PER_CATEGORY` : number of images per category
+- `MAX_EPISODES` : maximum limit on episodes/super-categories
+- `SEED` : seed for generating super-categories by the same random combination of categories (Do not change)
 
 
 #### Python Script
