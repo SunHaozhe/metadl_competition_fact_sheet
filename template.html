@@ -53,18 +53,30 @@
       
       
     <!--    Summary    -->
-    <div class='bottom-20 page-break'>
+    <div class='bottom-20'>
         <h4>Summary</h4>
         <table>
-            <tr> <th>Super Category</th> <th>AUC</th> <th>Error</th></tr>
+            <tr> <th>Super Category</th> <th>Categories</th> <th>AUC</th> <th>Error</th></tr>
             {% for episode in episodes %}
                 <tr> 
                     <td>{{episode['super_category']}}</td> 
+                    <td>
+                        {% for cat in episode['categories'] %}
+                            {{cat}}
+                            <br>
+                        {% endfor %}
+                    </td> 
                     <td>{{episode['AUC']}}</td> 
                     <td>{{episode['standard_error']}}</td>
                 </tr>
             {% endfor %}
         </table>
+    </div>
+      
+    <!--    Overall Histogram    -->
+    <div class='bottom-20 page-break'>
+        <h4>Overall AUC Histogram</h4>
+        <img class="center-fit" src='{{over_all_auc_histogram}}'>
     </div>
       
       

@@ -29,13 +29,6 @@ output_pdf = os.path.join(output_dir, 'report -- {}.pdf'.format(args.title))
 
 images_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), args.results_dir))
 
-# print(args.results_dir)
-# print(output_html)
-# print(output_pdf)
-
-# print(images_path)
-# exit()
-
     
 
 print("###########################")
@@ -68,6 +61,14 @@ with open(overall_logs_file, "r") as f:
 total_super_categories = logs[0].split(" : ")[1]
 total_categories = logs[1].split(" : ")[1]
 categories_combined = logs[3].split(" : ")[1]
+
+
+
+
+#----------------------------
+# Overall Histogram
+#----------------------------
+over_all_auc_histogram = os.path.join(images_path, "overall_auc_histogram.png")
 
 
 
@@ -159,6 +160,7 @@ subs = jinja2.Environment(
                                        total_super_categories=total_super_categories,
                                        total_categories=total_categories,
                                        categories_combined=categories_combined,
+                                       over_all_auc_histogram=over_all_auc_histogram,
                                        episodes=episodes)
 
 

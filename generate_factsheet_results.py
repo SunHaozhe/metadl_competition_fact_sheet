@@ -1059,8 +1059,97 @@ def make_super_category_directory(super_category):
         os.makedirs(super_category_path)
         
     
-    
 
+
+
+    
+    
+    
+    
+#=================================================    
+# Generate Overall Histogram
+#=================================================
+
+def get_range(dictionary, begin, end):
+    return dict(e for i, e in enumerate(dictionary.items()) if begin <= i <= end)
+
+
+def generate_overall_auc_histogram_and_desc_auc_plot():
+    
+    #Read super_Categories
+    super_categories_textfile_path = os.path.join(PREDICTIONS_PATH, 'super_categories.txt') 
+    with open(super_categories_textfile_path, 'r') as f:
+        super_categories = f.read().splitlines()
+        
+    #Read Categories AUC    
+    categories_dic = {}
+    for sup_cat in super_categories:
+        categories_auc_textfile_path = os.path.join(PREDICTIONS_PATH, sup_cat, 'categories_auc.txt') 
+        with open(categories_auc_textfile_path, 'r') as f:
+            categories_auc = f.read().splitlines()
+        for item in categories_auc:
+            arr_split = item.split(' : ')
+            categories_dic[arr_split[0]] = float(arr_split[1])
+            
+    #Sort in descending order        
+    sorted_categories_dic = dict(sorted(categories_dic.items(), key=lambda x: x[1], reverse=True))
+    
+    
+    print("##########################################")
+    print("Saving Overall AUC Histogram")
+    print("##########################################")
+    print()
+    print()
+    
+    #plot histogram
+    fig = plt.figure(figsize=(15,8))
+    plt.title('All CategoriesAUC Histogram', fontsize=20)
+    plt.xlabel('AUC Score', fontsize=16)
+    plt.ylabel('Frequency', fontsize=16)
+    plt.hist(list(sorted_categories_dic.values()), alpha=0.5, ec='black')
+    plt.show()
+    overall_categoris_auc_histogram_path = os.path.join(PREDICTIONS_PATH, "overall_auc_histogram.png")
+    fig.savefig(overall_categoris_auc_histogram_path, dpi=fig.dpi)
+    
+    
+    
+    
+    
+    print("##########################################")
+    print("Saving Desc AUC Plot")
+    print("##########################################")
+    print()
+    print()
+    
+    total_cat = len(sorted_categories_dic)
+    cat_per_plot = 30
+    plots_needed = math.ceil(len(sorted_categories_dic)/cat_per_plot)
+
+    print("Total Categories : ", total_cat)
+    print("Plots Needed : ", plots_needed)
+    print("Categories per plot : ", cat_per_plot)
+    
+    fig, axs = plt.subplots(plots_needed,1, figsize=(20, plots_needed*cat_per_plot))
+    fig.subplots_adjust(hspace = .1, wspace=.001)
+    axs = axs.ravel()
+
+    for i in range(plots_needed):
+        begin = i*cat_per_plot
+        end = (i*cat_per_plot+cat_per_plot-1) if (i*cat_per_plot+cat_per_plot-1) < total_cat else total_cat 
+        slice_i = get_range(sorted_categories_dic, begin, end)
+
+        axs[i].barh(list(slice_i.keys()), list(slice_i.values()))
+        axs[i].set_title("All Categories AUC - Slice "+ str(i+1), fontsize=20)
+        axs[i].xaxis.set_tick_params(rotation=90)
+        axs[i].set_xlabel("AUC Score")
+        axs[i].set_ylabel("Category")
+        axs[i].invert_yaxis()
+        ymin,ymax=axs[i].get_ylim()
+        axs[i].vlines(0.5, ymin=ymin, ymax=ymax, linestyles ="--", colors ="r")
+
+
+    descending_categoris_auc_path = os.path.join(PREDICTIONS_PATH, "descending_auc.png")
+    fig.savefig(descending_categoris_auc_path, dpi=fig.dpi)
     
     
     
@@ -1183,8 +1272,14 @@ for index, singlee_super_data in enumerate(super_data):
     if MAX_EPISODES is None or index < MAX_EPISODES:
         super_results[singlee_super_data['super_category']] = train_single_super_category(singlee_super_data)
 
+        
+        
+#generate over all hostogram and auc desc plot
+generate_overall_auc_histogram_and_desc_auc_plot()
 
 
+
+#Finish
 print("The whole process done in {:.2f} s.".format(time.time() - t0_start))
 
 
