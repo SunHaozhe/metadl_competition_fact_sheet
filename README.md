@@ -2,6 +2,8 @@
 Repository for generating factsheet from dataset exploration for MetaDL Competition
 
 
+<br>
+<br>
 
 ## Step 1 - Generate Fact Sheet Results
 
@@ -50,26 +52,27 @@ python generate_factsheet_results.py \
 #### Results
 The results generated in this step contains the following files in the ***PREDICTIONS*** directory:
 
+- logs.txt
+- super_categories.txt
+- one folder for each super_category (If you have 10 randomly generated super_categories, then you will see 10 folders named from 0-9)
+- One super_category folder contains the following files:
     - logs.txt
-    - super_categories.txt
-    - one folder for each super_category (If you have 10 randomly generated super_categories, then you will see 10 folders named from 0-9)
-    - One super_category folder contains the following files:
-        - logs.txt
-        - categories.txt
-        - categores_auc.txt
-        - train.csv
-        - valid.csv
-        - train_results.png
-        - confusion_matrix.png
-        - auc.png
-        - auc_histogram.png
-        - roc_curves.png
-        - sample_images.png
-        - wrongly_classified_images.png
+    - categories.txt
+    - categores_auc.txt
+    - train.csv
+    - valid.csv
+    - train_results.png
+    - confusion_matrix.png
+    - auc.png
+    - auc_histogram.png
+    - roc_curves.png
+    - sample_images.png
+    - wrongly_classified_images.png
 
 
 
-
+<br>
+<br>
 
 
 ## Step 2
@@ -92,6 +95,8 @@ The PDF will have a summary of the results in a table and then individual result
 
 
 
+<br>
+<br>
 
 ## Note:
 The categories/classes are combined in a way in Step 1 that no category is repeated in super-categories.  
