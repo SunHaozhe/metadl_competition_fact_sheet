@@ -14,7 +14,7 @@ parser=argparse.ArgumentParser()
 
 parser.add_argument('--CSV_PATH', required=True, help='Path of the CSV file which contains the label and image name')
 
-parser.add_argument('--CSV_WITH_TAB', default=False, help='True if CSV is tab separated otherwise false')
+parser.add_argument('--CSV_WITH_TAB', default=False, help='True if CSV is tab separated otherwise false', action="store_true")
 
 parser.add_argument('--IMAGE_PATH', required=True, help='Path of the directory where images to be used in this experiement are saved')
 
@@ -49,7 +49,7 @@ args=parser.parse_args()
 CSV_PATH = args.CSV_PATH
 
 # True if CSV is tab separated otherwise false
-CSV_WITH_TAB = False
+CSV_WITH_TAB = args.CSV_WITH_TAB
 
 # Path of the directory where images to be used in this experiement are saved
 IMAGE_PATH = args.IMAGE_PATH
@@ -473,13 +473,13 @@ def train_model(model, dataloaders, dataset_sizes, criterion, optimizer, schedul
                 
                 # saving prediction and ground truth for future use
                 if phase == 'train':
-                    train_predictions += list(preds.numpy())
-                    train_ground += list(labels.numpy())
-                    train_predicted_probabilities += list(probabilities.detach().numpy())
+                    train_predictions += list(preds.cpu().detach().numpy())
+                    train_ground += list(labels.cpu().detach().numpy())
+                    train_predicted_probabilities += list(probabilities.cpu().detach().numpy())
                 else:
-                    valid_predictions += list(preds.numpy())
-                    valid_ground += list(labels.numpy())
-                    valid_predicted_probabilities += list(probabilities.detach().numpy())
+                    valid_predictions += list(preds.cpu().detach().numpy())
+                    valid_ground += list(labels.cpu().detach().numpy())
+                    valid_predicted_probabilities += list(probabilities.cpu().detach().numpy())
                 
                 
             # end dataloader loop
@@ -1271,6 +1271,7 @@ save_overall_logs()
 for index, singlee_super_data in enumerate(super_data):
     if MAX_EPISODES is None or index < MAX_EPISODES:
         super_results[singlee_super_data['super_category']] = train_single_super_category(singlee_super_data)
+        plt.close('all')
 
         
         
