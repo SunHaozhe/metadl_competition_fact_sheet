@@ -31,7 +31,7 @@ In the notebook file `generate_fact_sheet_results.ipynb`, you have to set some v
 (skip this if you want to use ipython notebook)
 
 You can use the script `generate_fact_sheet_results.py` to generate the factsheet results by execuring the following shell command with the required argumenets
- 
+
 ```
 python generate_factsheet_results.py \
 --CSV_PATH './data.csv' \
@@ -100,3 +100,19 @@ The PDF will have a summary of the results in a table and then individual result
 
 ## Note:
 The categories/classes are combined in a way in Step 1 that no category is repeated in super-categories.  
+
+
+
+## Troubleshooting
+
+* Be aware that the proper installation of `pdfkit` can need installing `wkhtmltopdf`. Check this https://github.com/JazzCore/python-pdfkit/wiki/Installing-wkhtmltopdf 
+
+For example, if you are on Debian / Ubuntu:
+
+```bash
+apt-get update
+apt-get install wkhtmltopdf
+```
+
+* If the pdf report files cannot be automatically generated, you can keep the html report files (use the option `--keep_html` for `generate_pdf_report.py`) and convert them to pdf manually, for example via the print functionality of Chrome.
+* You might encounter an issue of `Image size of ...x... pixels is too large. It must be less than 2^16 in each direction` if you have large number of classes. This problems comes from the generation of `descending_auc.png` in the function `generate_overall_auc_histogram_and_desc_auc_plot` of `generate_factsheet_results.py`. You can decrease the dpi in order to overcome this issue (decrease `X` in the line `fig.savefig(descending_categoris_auc_path, dpi=X)`).
