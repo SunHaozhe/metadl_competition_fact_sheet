@@ -24,8 +24,8 @@ output_dir = os.path.join('./', 'report_files')
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-output_html = os.path.join(output_dir, 'report -- {}.html'.format(args.title))
-output_pdf = os.path.join(output_dir, 'report -- {}.pdf'.format(args.title))
+output_html = os.path.join(output_dir, 'report_{}.html'.format(args.title))
+output_pdf = os.path.join(output_dir, 'report_{}.pdf'.format(args.title))
 
 images_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), args.results_dir))
 
@@ -152,6 +152,15 @@ for super_cat in super_categories:
     
     
     episodes.append(super_cat_dic)
+
+# calculate the average AUC across episodes
+average_AUC = 0
+cnt = 0
+for episode in episodes:
+    average_AUC += float(episode["AUC"])
+    cnt += 1
+average_AUC /= cnt
+average_AUC = "{:.2f}".format(average_AUC)
     
     
 subs = jinja2.Environment(
@@ -161,7 +170,8 @@ subs = jinja2.Environment(
                                        total_categories=total_categories,
                                        categories_combined=categories_combined,
                                        over_all_auc_histogram=over_all_auc_histogram,
-                                       episodes=episodes)
+                                       episodes=episodes,
+                                       average_AUC=average_AUC)
 
 
 # lets write the substitution to a file
