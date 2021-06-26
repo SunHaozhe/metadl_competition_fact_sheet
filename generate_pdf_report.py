@@ -12,6 +12,9 @@ parser.add_argument("--results_dir", type=str, required=True,  help="""The direc
 parser.add_argument("--title", type=str, required=True, help="""Title of the html and pdf file.""")
 
 parser.add_argument("--output_dir", type=str, default="./", help="""The directory where the html and pdf file will be stored. Default is current directory""")
+parser.add_argument("--keep_html", action="store_true", default=False, 
+    help="""Whether keep the html reports from which pdf reports can be built. 
+    This is useful if the conversion between html and pdf fails.""")
 
 args = parser.parse_args()
 
@@ -197,7 +200,8 @@ print("PDF File is Ready")
 print("###########################")
 print()
 
-os.remove(output_html)
+if not args.keep_html:
+    os.remove(output_html)
 
 
 
