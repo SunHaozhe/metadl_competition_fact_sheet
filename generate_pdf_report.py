@@ -29,8 +29,10 @@ output_dir = os.path.join('./', 'report_files')
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-output_html = os.path.join(output_dir, 'report_{}.html'.format(args.title))
-output_pdf = os.path.join(output_dir, 'report_{}.pdf'.format(args.title))
+title = args.title
+
+output_html = os.path.join(output_dir, 'report_{}.html'.format(title.replace(" ", "_")))
+output_pdf = os.path.join(output_dir, 'report_{}.pdf'.format(title.replace(" ", "_")))
 
 images_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), args.results_dir))
 
@@ -187,7 +189,7 @@ average_AUC = "{:.2f}".format(average_AUC)
     
 subs = jinja2.Environment(
     loader=jinja2.FileSystemLoader('./')
-).get_template('template.html').render(title=args.title,
+).get_template('template.html').render(title=title,
                                        total_super_categories=total_super_categories,
                                        total_categories=total_categories,
                                        categories_combined=categories_combined,
