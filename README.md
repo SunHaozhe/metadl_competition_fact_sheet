@@ -89,6 +89,19 @@ python generate_pdf_report.py \
 --title "Fact Sheet Experiment # 1"
 ```
 
+***Optional Arguments***  
+`--keep_html` (default: False) : to get report both in `html` and `pdf` format
+
+
+Use the following command to keep `html` report
+
+```
+python generate_pdf_report.py \
+--results_dir "./experiment_1_results" \
+--title "Fact Sheet Experiment # 1" \
+--keep_html
+```
+
 This script will generate a pdf report using the html template `template.html`. The pdf file will be stored in a newly created directory with the name ***report_files***.
 
 The PDF will have a summary of the results in a table and then individual results of super-categories/classification tasks.
