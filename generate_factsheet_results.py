@@ -34,6 +34,8 @@ parser.add_argument('--IMAGES_PER_CATEGORY', type=int, default=10,
 parser.add_argument('--MAX_EPISODES', type=int, default=None, 
     help='maximum limit on episodes/super-categories')
 
+parser.add_argument('--USE_NORMALIZATION', action='store_true', default=False, 
+    help='Normalize the input images according to the way neural networks were pretrained on ImageNet')
 
 
 args=parser.parse_args()
@@ -75,6 +77,9 @@ IMAGES_PER_CATEGORY = args.IMAGES_PER_CATEGORY
 # maximum limit on episodes/super-categories
 # can be none or an integer
 MAX_EPISODES = args.MAX_EPISODES
+
+# Normalize the input images according to the way neural networks were pretrained on ImageNet
+USE_NORMALIZATION = args.USE_NORMALIZATION
 
 
 # seed for generating super-categories by the same random combination of categories
@@ -314,7 +319,7 @@ class ImgDataset(Dataset):
     
     
     
-    
+
     
 
 #=================================================
@@ -324,9 +329,16 @@ class ImgDataset(Dataset):
 
 
 def make_dataset(super_data_set, batch_size=64):
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-    ])
+    if not USE_NORMALIZATION:
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+        ])
+    else:
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
+        ])
     train_ds=ImgDataset(super_data_set['train_images'],super_data_set['train_labels_num'], transform)
     valid_ds=ImgDataset(super_data_set['valid_images'],super_data_set['valid_labels_num'], transform)
     
