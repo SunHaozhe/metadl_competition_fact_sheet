@@ -37,6 +37,10 @@ parser.add_argument('--MAX_EPISODES', type=int, default=None,
 parser.add_argument('--USE_NORMALIZATION', action='store_true', default=False, 
     help='Normalize the input images according to the way neural networks were pretrained on ImageNet')
 
+parser.add_argument('--EMBEDDING', action='store_true', default=False, 
+    help="""Select half of the available classes to train the neural network embedding extractor 
+    (to avoid using that trained on ImageNet), the remaining classes are used to generate factsheet.""")
+
 
 args=parser.parse_args()
 
@@ -80,6 +84,10 @@ MAX_EPISODES = args.MAX_EPISODES
 
 # Normalize the input images according to the way neural networks were pretrained on ImageNet
 USE_NORMALIZATION = args.USE_NORMALIZATION
+
+# Select half of the available classes to train the neural network embedding extractor 
+# (to avoid using that trained on ImageNet), the remaining classes are used to generate factsheet.
+EMBEDDING = args.EMBEDDING
 
 
 # seed for generating super-categories by the same random combination of categories
@@ -154,9 +162,12 @@ timestamp = str(datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S_%f"))
 if not os.path.exists(PREDICTIONS_PATH):
     os.makedirs(PREDICTIONS_PATH)
 
-    
-    
-    
+
+#=================================================
+# Setting device
+#=================================================
+
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     
     
 
@@ -172,19 +183,34 @@ else:
 print("Data Shape : ", data.shape)
 
 
-
-
-
-
-
-
 #=================================================
-# Categories
+# Prepare new embedding weight
 #=================================================
 
-categories = data[LABEL_COLUMN].unique()
-total_categories = len(categories)
+np.random.seed(SEED)
 
+if EMBEDDING:
+    from train_embedding_nn import train_embedding_nn
+    categories = data[LABEL_COLUMN].unique()
+    total_categories = len(categories)
+    
+    # classes for training the new embedding neural network
+    train_categories = np.random.choice(categories, size=total_categories//2, replace=False)
+    # classes for the fact sheet results
+    categories = np.array([xx for xx in categories if xx not in train_categories])
+    total_categories = len(categories)
+
+    print("Training embedding neural network")
+    print("{} classes for training embedding neural network, {} classes for the factsheet (AUC).".format(
+        len(train_categories), len(categories)))
+
+    train_df = data.loc[data[LABEL_COLUMN].isin(train_categories), [IMAGE_COLUMN, LABEL_COLUMN]]
+    
+    model_checkpoint_path = train_embedding_nn(train_df, IMAGE_PATH, LABEL_COLUMN, 
+        USE_NORMALIZATION, len(train_categories), device, batch_size=64, epochs=20)
+else:
+    categories = data[LABEL_COLUMN].unique()
+    total_categories = len(categories)
 
 
 
@@ -207,6 +233,7 @@ print("Categories to combine togather : ", CATEGORIES_TO_COMBINE)
 
 
 super_categories = np.array_split(categories,iterations_needed)
+
 
 total_super_categories = len(super_categories)
 
@@ -277,7 +304,7 @@ for index, super_category in enumerate(super_categories):
 # Baseline 
 #=================================================
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 
 
 
@@ -390,7 +417,13 @@ def make_dataset(super_data_set, batch_size=64):
 #=================================================
 
 def getModel(only_train_last_layer=True, number_of_classes=2):
-    model = models.resnet18(pretrained=True)
+    if not EMBEDDING:
+        model = models.resnet18(pretrained=True)
+    else:
+        model = models.resnet18(pretrained=False)
+        num_ftrs = model.fc.in_features
+        model.fc = nn.Linear(num_ftrs, len(train_categories))
+        model.load_state_dict(torch.load(model_checkpoint_path))
 
     if only_train_last_layer:
         for param in model.parameters():
@@ -1161,7 +1194,7 @@ def generate_overall_auc_histogram_and_desc_auc_plot():
 
 
     descending_categoris_auc_path = os.path.join(PREDICTIONS_PATH, "descending_auc.png")
-    fig.savefig(descending_categoris_auc_path, dpi=fig.dpi)
+    fig.savefig(descending_categoris_auc_path, dpi=50)
     
     
     
